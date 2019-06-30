@@ -1,0 +1,152 @@
+{% extends "header.html" %}
+
+{% block content %}
+
+<div class="container-fluid" style="height:auto;">
+<blockquote><p>Feature Based Classification (only for Mobile Phone Reviews)</p></blockquote>
+
+&bull;<cite>&nbsp;&nbsp;Instructions</cite><br/><br/>
+<p>&mdash;&nbsp;In Reviewset all reviews must be separated by line feed('\n') , and none of the reviews may contain any line feed. </p>
+<p>&mdash;&nbsp;Positive Review : score > 0</p>
+<p>&mdash;&nbsp;Neutral Review : score = 0</p>
+<p>&mdash;&nbsp;Negative Review : score < 0</p>
+
+
+
+&bull;<cite>&nbsp;&nbsp;Upload A ReviewSet</cite><br/><br/>
+<form name = "form" enctype = "multipart/form-data" action = "{% url "webui.views.SaveProfile" %}" method = "POST" >{% csrf_token %}
+	<div class="row">
+	<div class="file-field input-field col s5">
+		<div class="btn">
+			<span>File</span>
+			<input type="file" name="file">
+		</div>
+		<div class="file-path-wrapper">
+			<input class="file-path validate" type="text" ><p>{{suc_status}} : {{status}}</p>
+		</div>
+	</div>
+	<div class="input-field col s1" ><button class="btn waves-effect waves-light" type="submit" name="action" >Submit</button></div>&nbsp;&nbsp;&nbsp;
+	</div>
+  </form>
+&bull;<cite>&nbsp;&nbsp;Calculate Sentiment</cite><br/><br/>
+  
+  <div class="input-field col s1" style="margin-right:500px;"><a role="button" class="btn waves-effect waves-light" href="/getsentiment/">get sentiment charts</a></div>
+	
+	<br/>
+	
+	<br/>
+	<br/>
+	<br/>
+	<br/>
+	<br/>
+	
+	
+	
+	
+	
+	
+		
+	
+	
+<!--	
+<p>{{ans_dict}}</p>
+-->
+<p>&mdash;&nbsp;Total Sentiment Score :  {{tot_score}}</p>
+<!--<p>{{chart_score}}</p>
+<p>{{mydict}}</p>
+ 	
+	-->
+	
+<p>&mdash;&nbsp;Line Chart (Review -> score) </p>
+	
+	<script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+	<script type="text/javascript">
+    google.charts.load('current', {packages: ['corechart', 'line']});
+google.charts.setOnLoadCallback(drawBackgroundColor);
+
+function drawBackgroundColor() {
+      var data = new google.visualization.DataTable();
+      data.addColumn('number', 'X');
+      data.addColumn('number', 'Review Score');
+
+      data.addRows({{chart_score}});
+
+      var options = {
+        hAxis: {
+          title: 'Review Index'
+        },
+        vAxis: {
+          title: 'Sentiment Scores'
+        },
+        backgroundColor: '#f1f8e9'
+      };
+
+      var chart = new google.visualization.LineChart(document.getElementById('chart_div'));
+      chart.draw(data, options);
+    }
+	</script>
+
+<div id="chart_div"></div>
+     
+<script type="text/javascript">
+
+      // Load Charts and the corechart and barchart packages.
+      google.charts.load('current', {'packages':['corechart']});
+
+      // Draw the pie chart and bar chart when Charts is loaded.
+      google.charts.setOnLoadCallback(drawChart);
+
+      function drawChart() {
+
+		 var data = google.visualization.arrayToDataTable([
+        ["class", "sentiment", { role: "style" } ],
+        ["phone", parseFloat("{{ans_dict.phone}}"), "#b87333"],
+        ["speakers",parseFloat("{{ans_dict.speakers}}"), "silver"],
+        ["screen",parseFloat("{{ans_dict.screen}}"), "gold"],
+	     ["speed",parseFloat("{{ans_dict.speed}}"), "gold"],
+		      ["weight",parseFloat("{{ans_dict.weight}}"), "gold"],
+	     ["Camera",parseFloat("{{ans_dict.camera}}"), "gold"],
+		     ["storage",parseFloat("{{ans_dict.storage}}"), "gold"],
+			      ["sound",parseFloat("{{ans_dict.sound}}"), "gold"],
+				       ["processor",parseFloat("{{ans_dict.processor}}"), "gold"],
+					        ["ram",parseFloat("{{ans_dict.ram}}"), "gold"],
+	
+	
+	
+	
+		
+      ]);
+		var view = new google.visualization.DataView(data);
+      view.setColumns([0, 1,
+                       { calc: "stringify",
+                         sourceColumn: 1,
+                         type: "string",
+                         role: "annotation" },
+                       2]);
+
+      var options = {
+        title: "sentiment scores",
+        width: 1000,
+        height: 300,
+        bar: {groupWidth: "50%"},
+        legend: { position: "none" },
+      };
+      var chart = new google.visualization.ColumnChart(document.getElementById("columnchart_values"));
+      chart.draw(view, options);
+      }
+</script>
+	<br/>	<br/>	
+<p>&mdash;&nbsp;Histogram (feature -> score)</p>
+		<div id="columnchart_values" style="border: 1px solid #ccc"/>	
+	
+
+	 
+</div>	 
+	 {% endblock %}
+
+
+
+
+
+
+

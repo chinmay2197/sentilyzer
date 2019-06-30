@@ -1,0 +1,36 @@
+{% extends "header.html" %}
+
+{% block content %}
+<div class="container-fluid">
+<blockquote><p>Sentence Based Classification</p></blockquote>
+
+&bull;<cite>&nbsp;&nbsp;Instructions</cite><br/><br/>
+<p>&mdash;&nbsp;Review can be any length.</p>
+<p>&mdash;&nbsp;Positive Review : score > 0</p>
+<p>&mdash;&nbsp;Neutral Review : score = 0</p>
+<p>&mdash;&nbsp;Negative Review : score < 0</p>
+
+
+
+
+			<div class="row">
+				<form class="col s12" name="form" action = "{% url "webui.views.samsung_show" %}" method = "POST">{% csrf_token %}
+					<div class="row">
+						<div class="input-field col s11">
+							<textarea id="review_text" class="materialize-textarea" name="review_text" >{{review}}</textarea><label for="review_text">Enter Any Review</label>
+						</div>
+					</div>
+					<div class="input-field col s1" ><button class="btn waves-effect waves-light" type="submit" name="action">Get Sentiment</button></div>
+					
+				</form>
+			</div>
+	
+			<p>&mdash;&nbsp;Sentiment  :  {{result.OverallScore}}</p>
+			<p>&mdash;&nbsp;Sentiment for Nouns :</p>
+	
+
+			{%for key, value in result.NounScore.items %}
+			<p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{{key}} : {{value}}</p>
+			{%endfor%}
+</div>	
+{% endblock %}
